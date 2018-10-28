@@ -1,0 +1,29 @@
+{
+  "name": "nextcomplete",
+  "version": "1.0.0",
+  "description": "Complete Next Project",
+  "scripts": {
+    "build": "next build",
+    "start": "next start",
+    "dev": "next"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abrambueno1992/NextComplete.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abrambueno1992/NextComplete/issues"
+  },
+  "homepage": "https://github.com/abrambueno1992/NextComplete#readme",
+  "dependencies": {
+    "@material-ui/core": "^3.3.2",
+    "next": "^7.0.2",
+    "prop-types": "^15.6.2",
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "react-jss": "^8.6.1"
+  }
+}
