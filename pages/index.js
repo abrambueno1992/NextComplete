@@ -1,6 +1,7 @@
 // import React from 'react';
 import Head from 'next/head';
-import Header from '../components/Header';
+import Button from '@material-ui/core/Button';
+import withLayout from '../lib/withLayout';
 
 const Index = () => (
   <div style={{ padding: '10px 45px' }}>
@@ -8,9 +9,9 @@ const Index = () => (
       <title>Index Page</title>
       <meta name="description" content="This is the description of the Index Page" />
     </Head>
-    <Header />
     <p>Content of the Index Page</p>
+    <Button variant="contained">MUI button</Button>
   </div>
 );
 
-export default Index;
+export default withLayout(Index);
