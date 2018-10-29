@@ -5,7 +5,8 @@
   "scripts": {
     "build": "next build",
     "start": "next start",
-    "dev": "next"
+    "dev": "next",
+    "lint": "eslint pages"
   },
   "main": "index.js",
   "repository": {
@@ -27,7 +28,6 @@
     "react-jss": "^8.6.1"
   },
   "devDependencies": {
-    "babel-preset-env": "^1.7.0",
     "babel-eslint": "^8.2.5",
     "eslint": "^5.0.1",
     "eslint-config-airbnb": "^17.0.0",
