@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "dev": "next",
-    "lint": "eslint pages"
+    "lint": "eslint pages",
+    "dev-express": "nodemon server/app.js --watch server --exec babel-node --presets=@babel/preset-env"
   },
   "main": "index.js",
   "repository": {
