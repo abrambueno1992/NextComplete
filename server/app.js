@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import next from 'next';
 import mongoose from 'mongoose';
+import session from 'express-session';
+import mongoSessionStore from 'connect-mongo';
 import User from './models/User';
 
 dotenv.config();
@@ -27,6 +29,18 @@ const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
   const server = express();
+  server.use(
+    session({
+      name: 'builderbook.sid',
+      secret: 'HD2w.)q*VqRT4/#NK2M/,E^B)}FED5fWU!dKe[wk',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        maxAge: 14 * 24 * 60 * 60 * 1000,
+      },
+    }),
+  );
 
   server.get('/', async (req, res) => {
     // const user = { email: 'team@builderbook.org' };
