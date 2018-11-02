@@ -48,9 +48,11 @@ app.prepare().then(() => {
 
   server.get('/', async (req, res) => {
     // const user = { email: 'team@builderbook.org' };
-    req.session.foo = 'bar';
-    const user = await User.findOne({ slug: 'team-builder-book' });
-    app.render(req, res, '/', { user });
+    // req.session.foo = 'bar';
+    await User.findOne({ slug: 'team-builder-book' }).then((user) => {
+      req.user = user;
+      app.render(req, res, '/');
+    });
   });
 
   server.get('*', (req, res) => handle(req, res));
