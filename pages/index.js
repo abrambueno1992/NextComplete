@@ -10,7 +10,7 @@ class Index extends React.Component {
     user: PropTypes.shape({
       displayName: PropTypes.string,
       email: PropTypes.string.isRequired,
-    })
+    }),
   };
 
   static defaultProps = {
@@ -23,15 +23,15 @@ class Index extends React.Component {
       <div style={{ padding: '10px 45px' }}>
         <Head>
           <title>Dashboard</title>
-          <meta 
-            name="description" 
-            content="List of purchased books."
-          />
+          <meta name="description" content="List of purchased books." />
         </Head>
         <p> Dashboard </p>
-        <p>Email: {user.email}</p>
+        <p>
+Email:
+          {user.email}
+        </p>
       </div>
-    )
+    );
   }
 }
 
