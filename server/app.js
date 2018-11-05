@@ -4,7 +4,8 @@ import next from 'next';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import mongoSessionStore from 'connect-mongo';
-import User from './models/User';
+import { auth } from 'google-auth-library';
+// import User from './models/User';
 
 dotenv.config();
 
@@ -45,15 +46,15 @@ app.prepare().then(() => {
     },
   };
   server.use(session(sess));
-
-  server.get('/', async (req, res) => {
-    // const user = { email: 'team@builderbook.org' };
-    // req.session.foo = 'bar';
-    await User.findOne({ slug: 'team-builder-book' }).then((user) => {
-      req.user = user;
-      app.render(req, res, '/');
-    });
-  });
+  auth({ server, ROOT_URL })
+  // server.get('/', async (req, res) => {
+  //   // const user = { email: 'team@builderbook.org' };
+  //   // req.session.foo = 'bar';
+  //   await User.findOne({ slug: 'team-builder-book' }).then((user) => {
+  //     req.user = user;
+  //     app.render(req, res, '/');
+  //   });
+  // });
 
   server.get('*', (req, res) => handle(req, res));
 
