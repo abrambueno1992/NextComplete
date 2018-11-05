@@ -4,7 +4,7 @@ import next from 'next';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import mongoSessionStore from 'connect-mongo';
-import { auth } from 'google-auth-library';
+import auth  from './google'
 // import User from './models/User';
 
 dotenv.config();
