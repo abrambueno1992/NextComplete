@@ -4,8 +4,9 @@ import next from 'next';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import mongoSessionStore from 'connect-mongo';
-import auth  from './google'
+import auth from './google';
 // import User from './models/User';
+import logger from './logs';
 
 dotenv.config();
 
@@ -46,7 +47,7 @@ app.prepare().then(() => {
     },
   };
   server.use(session(sess));
-  auth({ server, ROOT_URL })
+  auth({ server, ROOT_URL });
   // server.get('/', async (req, res) => {
   //   // const user = { email: 'team@builderbook.org' };
   //   // req.session.foo = 'bar';
@@ -60,6 +61,6 @@ app.prepare().then(() => {
 
   server.listen(port, (err) => {
     if (err) throw err;
-    console.log(`> Ready on ${ROOT_URL}`); // eslint-disable-line no-console
+    logger.info(`> Ready on ${ROOT_URL}`);
   });
 });
