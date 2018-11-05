@@ -33,6 +33,7 @@
     "mongoose": "^5.3.7",
     "next": "^7.0.2",
     "nodemon": "^1.18.5",
+    "npm": "^6.4.1",
     "nprogress": "^0.2.0",
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
