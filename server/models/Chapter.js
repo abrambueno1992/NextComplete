@@ -14,9 +14,6 @@ const mongoSchema = new Schema({
     required: true,
     default: false,
   },
-  githubFilePath: {
-    type: String,
-  },
   title: {
     type: String,
     required: true,
@@ -26,11 +23,6 @@ const mongoSchema = new Schema({
     required: true,
   },
   content: {
-    type: String,
-    default: '',
-    required: true,
-  },
-  htmlContent: {
     type: String,
     default: '',
     required: true,
@@ -47,19 +39,15 @@ const mongoSchema = new Schema({
     type: Date,
     required: true,
   },
+  githubFilePath: {
+    type: String,
+  },
   order: {
     type: Number,
     required: true,
   },
   seoTitle: String,
   seoDescription: String,
-  sections: [
-    {
-      text: String,
-      level: Number,
-      escapedText: String,
-    },
-  ],
 });
 
 class ChapterClass {
@@ -81,6 +69,9 @@ class ChapterClass {
     return chapterObj;
   }
 }
+
+mongoSchema.index({ bookId: 1, slug: 1 }, { unique: true });
+mongoSchema.index({ bookId: 1, githubFilePath: 1 }, { unique: true });
 
 mongoSchema.loadClass(ChapterClass);
 
