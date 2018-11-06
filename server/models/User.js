@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import mongoose from 'mongoose';
 
+import getEmailTemplate from './EmailTemplate';
+
 import generateSlug from '../utils/slugify';
 
 const { Schema } = mongoose;
@@ -49,15 +51,7 @@ const mongoSchema = new Schema({
 
 class UserClass {
   static publicFields() {
-    return [
-      'id',
-      'displayName',
-      'email',
-      'avatarUrl',
-      'slug',
-      'isAdmin',
-      'isGithubConnected',
-    ];
+    return ['id', 'displayName', 'email', 'avatarUrl', 'slug', 'isAdmin', 'isGithubConnected'];
   }
 
   static async signInOrSignUp({
