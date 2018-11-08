@@ -1,7 +1,7 @@
 import React from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 
-let openSnackbarFn;
+let openSnackbarFn // = 'funk';
 
 class Notifier extends React.Component {
   state = {
@@ -11,6 +11,7 @@ class Notifier extends React.Component {
 
   componentDidMount() {
     openSnackbarFn = this.openSnackbar;
+    console.log('cdm');
   }
 
   handleSnackbarRequestClose = () => {
@@ -36,7 +37,7 @@ class Notifier extends React.Component {
         autoHideDuration={5000}
         onClose={this.handleSnackbarRequestClose}
         open={this.state.open}
-        snackbarcontentprops={{
+        ContentProps={{
           'aria-describedby': 'snackbar-message-id',
         }}
       />
@@ -45,7 +46,10 @@ class Notifier extends React.Component {
 }
 
 export function openSnackbar({ message }) {
-  openSnackbarFn({ message });
+  console.log('cdm ex');
+  // if (openSnackbarFn !== 'funk') {
+    openSnackbarFn({ message });
+  // }
 }
 
 export default Notifier;
