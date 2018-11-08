@@ -1,7 +1,7 @@
 import React from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 
-let openSnackbarFn // = 'funk';
+let openSnackbarFn;
 
 class Notifier extends React.Component {
   state = {
@@ -46,10 +46,7 @@ class Notifier extends React.Component {
 }
 
 export function openSnackbar({ message }) {
-  console.log('cdm ex');
-  // if (openSnackbarFn !== 'funk') {
-    openSnackbarFn({ message });
-  // }
+  openSnackbarFn({ message });
 }
 
 export default Notifier;
