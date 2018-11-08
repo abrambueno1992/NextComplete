@@ -29,6 +29,10 @@ const ROOT_URL = process.env.ROOT_URL || `http://localhost:${port}`;
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+const URL_MAP = {
+  '/login': '/public/login',
+};
+
 app.prepare().then(() => {
   const server = express();
   const sess = {
@@ -56,7 +60,14 @@ app.prepare().then(() => {
   //   });
   // });
 
-  server.get('*', (req, res) => handle(req, res));
+  server.get('*', (req, res) => {
+    const url = URL_MAP[req.path];
+    if (url) {
+      app.render(req, res, url);
+    } else {
+      handle(req, res);
+    }
+  });
 
   server.listen(port, (err) => {
     if (err) throw err;
