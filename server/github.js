@@ -1,6 +1,6 @@
 import qs from 'qs';
 import request from 'request';
-import GithubAPI from 'github';
+import GithubAPI from '@octokit/rest';
 
 import User from './models/User';
 
@@ -19,11 +19,13 @@ export function setupGithub({ server }) {
       return;
     }
 
-    res.redirect(`${AUTHORIZE_URI}?${qs.stringify({
-      scope: 'repo',
-      state: req.session.state,
-      client_id: CLIENT_ID,
-    })}`);
+    res.redirect(
+      `${AUTHORIZE_URI}?${qs.stringify({
+        scope: 'repo',
+        state: req.session.state,
+        client_id: CLIENT_ID,
+      })}`,
+    );
   });
 
   server.get('/auth/github/callback', (req, res) => {

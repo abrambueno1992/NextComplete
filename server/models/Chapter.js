@@ -221,7 +221,7 @@ class ChapterClass {
       htmlContent,
       sections,
       excerpt,
-      htmlExcerpt
+      htmlExcerpt,
       isFree,
       order,
       seoTitle,

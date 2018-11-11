@@ -4,9 +4,9 @@ import mongoSessionStore from 'connect-mongo';
 import next from 'next';
 import mongoose from 'mongoose';
 
-
 import auth from './google';
 import api from './api';
+import routesWithSlug from './routesWithSlug';
 
 import logger from './logs';
 
@@ -58,11 +58,12 @@ app.prepare().then(() => {
 
   auth({ server, ROOT_URL });
   api(server);
+  routesWithSlug({ server, app });
 
-  server.get('/books/:bookSlug/:chapterSlug', (req, res) => {
-    const { bookSlug, chapterSlug } = req.params;
-    app.render(req, res, '/public/read-chapter', { bookSlug, chapterSlug });
-  });
+  // server.get('/books/:bookSlug/:chapterSlug', (req, res) => {
+  //   const { bookSlug, chapterSlug } = req.params;
+  //   app.render(req, res, '/public/read-chapter', { bookSlug, chapterSlug });
+  // });
 
   server.get('*', (req, res) => {
     const url = URL_MAP[req.path];
