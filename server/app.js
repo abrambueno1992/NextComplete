@@ -4,6 +4,7 @@ import mongoSessionStore from 'connect-mongo';
 import next from 'next';
 import mongoose from 'mongoose';
 
+
 import auth from './google';
 import api from './api';
 
@@ -36,7 +37,7 @@ const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
   const server = express();
-
+  server.use(express.json());
   const MongoStore = mongoSessionStore(session);
   const sess = {
     name: 'builderbook.sid',
