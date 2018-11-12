@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import auth from './google';
 import api from './api';
 import routesWithSlug from './routesWithSlug';
+import { setupGithub as github } from './github';
 
 import logger from './logs';
 
@@ -58,6 +59,7 @@ app.prepare().then(() => {
   server.use(session(sess));
 
   auth({ server, ROOT_URL });
+  github({ server });
   api(server);
   routesWithSlug({ server, app });
 
