@@ -49,10 +49,34 @@ class ReadChapter extends React.Component {
     }
 
     this.state = {
+      showTOC: false,
       chapter,
       htmlContent,
     };
   }
+
+  componentDidMount() {
+    document.getElementById('main-content').addEventListener('scroll', this.onScroll);
+  }
+
+  componentWillUnmount() {
+    document.getElementById('main-content').removeEventListener('scroll', this.onScroll);
+  }
+
+  onScroll = () => {
+    const sectionElms = document.querySelectorAll('span.section-anchor');
+
+    let activeSection;
+
+    for (let i = 0; i < sectionElms.length; i += 1) {
+      const s = sectionElms[i];
+
+      activeSection = {
+        hash: s.attributes.getNamedItem('name').value,
+      };
+    }
+    this.setState({ activeSection });
+  };
 
   componentWillReceiveProps(nextProps) {
     const { chapter } = nextProps;
@@ -69,7 +93,7 @@ class ReadChapter extends React.Component {
     return (
       <div>
         <h2>
-Chapter:
+          Chapter:
           {chapter.title}
         </h2>
 
@@ -80,7 +104,8 @@ Chapter:
 
   renderSections() {
     const { sections } = this.state.chapter;
-
+    const { activeSection } = this.state;
+    console.log(activeSection);
     if (!sections || !sections.length === 0) {
       return null;
     }
@@ -89,16 +114,29 @@ Chapter:
       <ul>
         {sections.map(s => (
           <li key={s.escapedText} style={{ paddingTop: '10px' }}>
-            <a href={`#${s.escapedText}`}>{s.text}</a>
+            <a
+              href={`#${s.escapedText}`}
+              style={{
+                color: activeSection && activeSection.hash === s.escapedText ? '#1565C0' : '#222',
+              }}
+            >
+              {s.text}
+            </a>
           </li>
         ))}
       </ul>
     );
   }
 
-  renderSidebar() {
-    const { chapter } = this.state;
+  toggleChapterList = () => {
+    this.setState({ showTOC: !this.state.showTOC });
+  };
 
+  renderSidebar() {
+    const { showTOC, chapter } = this.state;
+    if (!showTOC) {
+      return null;
+    }
     const { book } = chapter;
     const { chapters } = book;
 
@@ -107,6 +145,7 @@ Chapter:
         style={{
           textAlign: 'left',
           position: 'absolute',
+          marginTop: '1.5%',
           bottom: 0,
           top: '64px',
           left: 0,
@@ -188,6 +227,9 @@ Chapter:
           <i // eslint-disable-line
             className="material-icons"
             style={styleIcon}
+            onClick={this.toggleChapterList}
+            onKeyPress={this.toggleChapterList}
+            role="button"
           >
             format_list_bulleted
           </i>
