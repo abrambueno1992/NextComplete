@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Error from 'next/error';
 import Head from 'next/head';
 import Link from 'next/link';
+import throttle from 'lodash/throttle';
+import isEqual from 'lodash/isEqual';
 
 import { getChapterDetail } from '../../lib/api/public';
 import withLayout from '../../lib/withLayout';
@@ -63,20 +65,44 @@ class ReadChapter extends React.Component {
     document.getElementById('main-content').removeEventListener('scroll', this.onScroll);
   }
 
-  onScroll = () => {
+  onScroll = throttle(() => {
     const sectionElms = document.querySelectorAll('span.section-anchor');
-
     let activeSection;
 
+    let sectionAbove;
     for (let i = 0; i < sectionElms.length; i += 1) {
       const s = sectionElms[i];
+      const b = s.getBoundingClientRect();
+      const anchorBottom = b.bottom;
 
-      activeSection = {
-        hash: s.attributes.getNamedItem('name').value,
-      };
+      if (anchorBottom >= 0 && anchorBottom <= window.innerHeight) {
+        activeSection = {
+          hash: s.attributes.getNamedItem('name').value,
+        };
+
+        break;
+      }
+
+      if (anchorBottom > window.innerHeight && i > 0) {
+        if (sectionAbove.bottom <= 0) {
+          activeSection = {
+            hash: sectionElms[i - 1].attributes.getNamedItem('name').value,
+          };
+          break;
+        }
+      } else if (i + 1 === sectionElms.length) {
+        activeSection = {
+          hash: s.attributes.getNamedItem('name').value,
+        };
+      }
+
+      sectionAbove = b;
     }
-    this.setState({ activeSection });
-  };
+
+    if (!isEqual(this.state.activeSection, activeSection)) {
+      this.setState({ activeSection });
+    }
+  }, 500);
 
   componentWillReceiveProps(nextProps) {
     const { chapter } = nextProps;
@@ -107,6 +133,7 @@ class ReadChapter extends React.Component {
     const { activeSection } = this.state;
     console.log(activeSection);
     if (!sections || !sections.length === 0) {
+      console.log('NULL render', this.state.chapter);
       return null;
     }
 
@@ -168,7 +195,11 @@ class ReadChapter extends React.Component {
                 as={`/books/${book.slug}/${ch.slug}`}
                 href={`/public/read-chapter?bookSlug=${book.slug}&chapterSlug=${ch.slug}`}
               >
-                <a style={{ color: chapter._id === ch._id ? '#1565C0' : '#222' }}>{ch.title}</a>
+                <a style={{ color: chapter._id === ch._id ? '#1565C0' : '#222' }}>
+                  {ch.title}
+                  {' '}
+test
+                </a>
               </Link>
               {chapter._id === ch._id ? this.renderSections() : null}
             </li>
