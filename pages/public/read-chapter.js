@@ -9,6 +9,7 @@ import isEqual from 'lodash/isEqual';
 import { getChapterDetail } from '../../lib/api/public';
 import withLayout from '../../lib/withLayout';
 import withAuth from '../../lib/withAuth';
+import Header from '../../components/Header';
 
 const styleIcon = {
   opacity: '0.75',
@@ -54,6 +55,7 @@ class ReadChapter extends React.Component {
       showTOC: false,
       chapter,
       htmlContent,
+      hideHeader: false,
     };
   }
 
@@ -65,11 +67,11 @@ class ReadChapter extends React.Component {
     document.getElementById('main-content').removeEventListener('scroll', this.onScroll);
   }
 
-  onScroll = throttle(() => {
+  onScrollActiveSection = () => {
     const sectionElms = document.querySelectorAll('span.section-anchor');
     let activeSection;
 
-    let sectionAbove;
+    let aboveSection;
     for (let i = 0; i < sectionElms.length; i += 1) {
       const s = sectionElms[i];
       const b = s.getBoundingClientRect();
@@ -84,7 +86,7 @@ class ReadChapter extends React.Component {
       }
 
       if (anchorBottom > window.innerHeight && i > 0) {
-        if (sectionAbove.bottom <= 0) {
+        if (aboveSection.bottom <= 0) {
           activeSection = {
             hash: sectionElms[i - 1].attributes.getNamedItem('name').value,
           };
@@ -96,12 +98,26 @@ class ReadChapter extends React.Component {
         };
       }
 
-      sectionAbove = b;
+      aboveSection = b;
     }
 
     if (!isEqual(this.state.activeSection, activeSection)) {
       this.setState({ activeSection });
     }
+  };
+
+  onScrollHideHeader = () => {
+    const distanceFromTop = document.getElementById('main-content').scrollTop;
+    const hideHeader = distanceFromTop > 500;
+
+    if (this.state.hideHeader !== hideHeader) {
+      this.setState({ hideHeader });
+    }
+  };
+
+  onScroll = throttle(() => {
+    this.onScrollActiveSection();
+    this.onScrollHideHeader();
   }, 500);
 
   componentWillReceiveProps(nextProps) {
@@ -160,7 +176,7 @@ class ReadChapter extends React.Component {
   };
 
   renderSidebar() {
-    const { showTOC, chapter } = this.state;
+    const { showTOC,hideHeader, chapter } = this.state;
     if (!showTOC) {
       return null;
     }
@@ -172,14 +188,15 @@ class ReadChapter extends React.Component {
         style={{
           textAlign: 'left',
           position: 'absolute',
-          marginTop: '1.5%',
           bottom: 0,
-          top: '64px',
+          top: hideHeader ? 0 : '64px',
+          transition: 'top 0.5s ease-in',
           left: 0,
           overflowY: 'auto',
           overflowX: 'hidden',
           width: '400px',
           padding: '0px 25px',
+          marginTop: '1.5%',
         }}
       >
         <p style={{ padding: '0px 40px', fontSize: '17px', fontWeight: '400' }}>{book.name}</p>
@@ -210,7 +227,9 @@ test
   }
 
   render() {
-    const { chapter } = this.state;
+    const { user } = this.props;
+
+    const { chapter, showTOC, hideHeader } = this.state;
 
     if (!chapter) {
       return <Error statusCode={404} />;
@@ -228,6 +247,7 @@ test
             <meta name="description" content={chapter.seoDescription} />
           ) : null}
         </Head>
+        <Header user={user} hideHeader={hideHeader} />
 
         {this.renderSidebar()}
 
@@ -238,7 +258,8 @@ test
             position: 'fixed',
             right: 0,
             bottom: 0,
-            top: '64px',
+            top: hideHeader ? 0 : '64px',
+            transition: 'top 0.5s ease-in',
             left: '400px',
             overflowY: 'auto',
             overflowX: 'hidden',
@@ -251,11 +272,12 @@ test
         <div
           style={{
             position: 'fixed',
-            top: '80px',
+            top: hideHeader ? '20px' : '80px',
+            transition: 'top 0.5s ease-in',
             left: '15px',
           }}
         >
-          <i // eslint-disable-line
+          <i //eslint-disable-line
             className="material-icons"
             style={styleIcon}
             onClick={this.toggleChapterList}
@@ -270,4 +292,4 @@ test
   }
 }
 
-export default withAuth(withLayout(ReadChapter), { loginRequired: false });
+export default withAuth(withLayout(ReadChapter, { noHeader: true }), { loginRequired: false });
