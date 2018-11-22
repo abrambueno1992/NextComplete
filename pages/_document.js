@@ -3,6 +3,12 @@ import Document, { Head, Main, NextScript } from 'next/document';
 import JssProvider from 'react-jss/lib/JssProvider';
 import getContext from '../lib/context';
 
+const { StripePublishableKey } = process.env;
+console.log(StripePublishableKey);
+
+const env = { StripePublishableKey };
+console.log(env);
+
 class MyDocument extends Document {
   render() {
     return (
@@ -21,10 +27,7 @@ class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Muli:300,400:latin"
           />
-           <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          />
+          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
           <link
             rel="stylesheet"
             href="https://storage.googleapis.com/builderbook/nprogress.min.css"
@@ -75,6 +78,8 @@ class MyDocument extends Document {
           }}
         >
           <Main />
+          {/* eslint-disable-next-line react/no-danger */}
+          <script dangerouslySetInnerHTML={{ __html: `__ENV__ = ${htmlescape(env)}` }} />
           <NextScript />
         </body>
       </html>

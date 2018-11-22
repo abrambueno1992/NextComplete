@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "start": "next start",
-    "lint": "eslint pages",
+    "lint": "eslint pages components components/cutomer components/admin",
     "dev": "nodemon server/app.js --watch server --exec babel-node --presets=@babel/preset-env",
     "test": "jest --coverage"
   },
