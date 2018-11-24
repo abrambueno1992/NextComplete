@@ -7,6 +7,8 @@ import Button from '@material-ui/core/Button';
 
 import { buyBook } from '../../lib/api/customer';
 import notify from '../../lib/notifier';
+import env from '../../lib/env';
+const { StripePublishableKey } = env;
 
 const styleBuyButton = {
   margin: '20px 20px 20px 0px',
