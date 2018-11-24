@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import StripeCheckout from 'react-stripe-checkout';
 import NProgress from 'nprogress';
-
 import Button from '@material-ui/core/Button';
 
 import { buyBook } from '../../lib/api/customer';
 import notify from '../../lib/notifier';
+
 import env from '../../lib/env';
+
 const { StripePublishableKey } = env;
 
 const styleBuyButton = {
@@ -16,11 +17,30 @@ const styleBuyButton = {
 };
 
 class BuyButton extends React.Component {
-  // 1. propTypes and defaultProps
+  static propTypes = {
+    book: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+    }),
+    user: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+    }),
+    showModal: PropTypes.bool,
+  };
 
-  // 2. constructor (set initial state)
+  static defaultProps = {
+    book: null,
+    user: null,
+    showModal: false,
+  };
 
-  // 3. onToken function
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showModal: !!props.showModal,
+    };
+  }
+
   onToken = async (token) => {
     NProgress.start();
     const { book } = this.props;
@@ -36,7 +56,6 @@ class BuyButton extends React.Component {
     }
   };
 
-  // 4. onLoginClicked function
   onLoginClicked = () => {
     const { user } = this.props;
 
@@ -46,7 +65,6 @@ class BuyButton extends React.Component {
   };
 
   render() {
-    // 5. define variables with props and state
     const { book, user } = this.props;
     const { showModal } = this.state;
 
@@ -55,7 +73,6 @@ class BuyButton extends React.Component {
     }
 
     if (!user) {
-      // 6. Regular button with onClick={this.onLoginClicked} event handler
       return (
         <div>
           <Button
@@ -64,15 +81,13 @@ class BuyButton extends React.Component {
             color="primary"
             onClick={this.onLoginClicked}
           >
-            Buy for $
-            {book.price}
+            Buy for ${book.price}
           </Button>
         </div>
       );
     }
 
     return (
-      // 7. StripeCheckout button with token and stripeKey parameters
       <StripeCheckout
         stripeKey={StripePublishableKey}
         token={this.onToken}
@@ -82,8 +97,7 @@ class BuyButton extends React.Component {
         desktopShowModal={showModal || null}
       >
         <Button variant="contained" style={styleBuyButton} color="primary">
-          Buy for $
-          {book.price}
+          Buy for ${book.price}
         </Button>
       </StripeCheckout>
     );
